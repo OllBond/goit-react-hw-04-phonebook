@@ -1,85 +1,64 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import initialState from './initialState';
 import css from './ContactForm.module.css';
-export class ContactForm extends Component {
-  state = {
-    ...initialState,
-  };
-  // метод, який оновить state
-  // функція збирає дані з кожного input
-  handleInputChange = ({ target }) => {
+
+const ContactForm = ({ onSubmit }) => {
+  const [state, setState] = useState({ ...initialState });
+  // target - це деструктуризація event
+  const handleChange = ({ target }) => {
     const { name, value } = target;
-    this.setState({
-      [name]: value,
+    setState(prevState => {
+      return { ...prevState, [name]: value };
     });
   };
-  handleSubmit = event => {
-    event.preventDefault();
-    const { onSubmit } = this.props;
-    // onSubmit кладе state в корзинку, віддає наверх
-    const result = onSubmit({ ...this.state });
-    if (result) {
-      // обнуляє
-      this.reset();
-    }
+  const handleSubmit = e => {
+    e.preventDefault();
+    onSubmit({ name, number });
+    setState({ ...initialState });
   };
-  reset() {
-    // обнуляє name і number
-    this.setState({
-      ...initialState,
-    });
-  }
-  render() {
-    const { handleInputChange, handleSubmit } = this;
-    const { name, number } = this.state;
-    return (
-      <div className={css.wrapper}>
-        <div className={css.contactFormBlock}>
-          <form className="" onSubmit={handleSubmit}>
-            <div className={css.conactFormGroup}>
-              <label className={css.label} htmlFor={this.nameInputId}>
-                Name
-              </label>
-              <input
-                className={css.input}
-                // зв'язок інпуту і state
-                value={name}
-                onChange={handleInputChange}
-                type="text"
-                name="name"
-                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                required
-                id={this.nameInputId}
-              />
-            </div>
-            <div className={css.conactFormGroup}>
-              <label className={css.label} htmlFor={this.numberInputId}>
-                Number
-              </label>
-              <input
-                className={css.input}
-                // зв'язок інпуту і state
-                value={number}
-                onChange={handleInputChange}
-                type="tel"
-                name="number"
-                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                required
-                id={this.numberInputId}
-              />
-            </div>
-            <button className={css.btnAddContact} type="submit">
-              Add contact
-            </button>
-          </form>
-        </div>
+  const { name, number } = state;
+  return (
+    <div className={css.wrapper}>
+      <div className={css.contactFormBlock}>
+        <form className="" onSubmit={handleSubmit}>
+          <div className={css.conactFormGroup}>
+            <label className={css.label}>Name</label>
+            <input
+              className={css.input}
+              // зв'язок інпуту і state
+              value={name}
+              onChange={handleChange}
+              type="text"
+              name="name"
+              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+              required
+            />
+          </div>
+          <div className={css.conactFormGroup}>
+            <label className={css.label}>Number</label>
+            <input
+              className={css.input}
+              // зв'язок інпуту і state
+              value={number}
+              onChange={handleChange}
+              type="tel"
+              name="number"
+              pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+              required
+            />
+          </div>
+          <button className={css.btnAddContact} type="submit">
+            Add contact
+          </button>
+        </form>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
 export default ContactForm;
 
 ContactForm.propTypes = {
