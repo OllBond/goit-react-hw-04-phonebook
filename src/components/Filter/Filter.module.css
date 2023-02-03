@@ -1,0 +1,15 @@
+.conactFormGroup {
+  display: grid;
+  gap: 15px;
+  margin-bottom: 5px;
+  margin-left: 10px;
+  font-size: 25px;
+}
+.label {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.input {
+  margin-bottom: 30px;
+  font-size: 30px;
+  max-width: 200px;
+}
