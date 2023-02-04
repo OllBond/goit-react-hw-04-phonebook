@@ -10,14 +10,15 @@ import css from './ContactForm/ContactForm.module.css';
 export const App = () => {
   const [contacts, setContacts] = useState(() => {
     const contacts = JSON.parse(localStorage.getItem('my-contacts'));
-    // якщо contacts null - повертаємо []
-    // якщо contact пустий масив або повний - повертємо contacts
+    //   // якщо contacts null - повертаємо []
+    //   // якщо contact пустий масив або повний - повертємо contacts
     return contacts ? contacts : [];
   });
 
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
+    // ця ф-я спрацьовує вдруге, коли в масив додається щось або видаляється
     localStorage.setItem('my-contacts', JSON.stringify(contacts));
   }, [contacts]);
 
@@ -50,11 +51,11 @@ export const App = () => {
     return true;
   };
   const removeContact = id => {
-    setContacts(prevContacts => {
+    setContacts(prevContacts =>
       // фільтруємо попередні контакти, повертається новий масив з контактами
       // крім того, що треба виділити
-      prevContacts.filter(contact => contact.id !== id);
-    });
+      prevContacts.filter(contact => contact.id !== id)
+    );
   };
   const handleFilter = ({ target }) => setFilter(target.value);
 
@@ -79,7 +80,6 @@ export const App = () => {
   return (
     <div>
       <h1 className={css.title}>Phonebook</h1>
-
       <ContactForm onSubmit={addContact} />
       <h2 className={css.title}>Contacts</h2>
       <Filter handleInputChange={handleFilter} value={filter} />
