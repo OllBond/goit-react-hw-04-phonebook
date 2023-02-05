@@ -1,22 +1,14 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import initialState from './initialState';
+import useForm from 'components/shared/hooks/useForm';
 import css from './ContactForm.module.css';
 
 const ContactForm = ({ onSubmit }) => {
-  const [state, setState] = useState({ ...initialState });
-  // target - це деструктуризація event
-  const handleChange = ({ target }) => {
-    const { name, value } = target;
-    setState(prevState => {
-      return { ...prevState, [name]: value };
-    });
-  };
-  const handleSubmit = e => {
-    e.preventDefault();
-    onSubmit({ ...state });
-    setState({ ...initialState });
-  };
+  // кастомний хук
+  const { state, handleChange, handleSubmit } = useForm({
+    initialState,
+    onSubmit,
+  });
   const { name, number } = state;
   return (
     <div className={css.wrapper}>
